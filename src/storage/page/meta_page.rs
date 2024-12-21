@@ -1,4 +1,5 @@
 use std::mem;
+
 pub struct TableMeta {
     table_name: String,
     record_size: usize,

@@ -20,7 +20,7 @@ pub enum DataType {
     /// fix-length string 1 byte
     Char(usize),
     /// unfix-length string
-    Varhar(usize),
+    Varchar(usize),
     /// binary form long text data
     Blob(usize),
     /// (precision, scale)

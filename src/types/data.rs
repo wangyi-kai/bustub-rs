@@ -12,8 +12,9 @@ pub enum Data {
     Varchar(String),
 }
 
+#[derive(Debug, Clone)]
 #[repr(i32)]
-enum TypeId {
+pub enum TypeId {
     INVALID = 0,
     BOOLEAN = 1,
     TINYINT = 2,
@@ -27,7 +28,7 @@ enum TypeId {
 
 
 
-impl Data {
+impl TypeId {
     fn new(data: &[u8], type_id: TypeId) -> Data {
         unsafe {
             match type_id {

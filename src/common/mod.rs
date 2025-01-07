@@ -1,5 +1,5 @@
-mod rid;
-mod error;
+pub mod rid;
+pub mod error;
 
 pub const INVALID_PAGE_ID: i32 = -1;
 pub const INVALID_TXN_ID: i64 = -1;

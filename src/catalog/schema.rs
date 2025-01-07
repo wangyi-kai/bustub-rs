@@ -1,4 +1,4 @@
-use super::column::{*};
+use crate::catalog::column::Column;
 
 #[derive(Clone, Debug)]
 pub struct Schema {

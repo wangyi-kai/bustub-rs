@@ -41,22 +41,27 @@ impl Column {
     pub fn get_name(&self) -> String {
         self.col_name.clone()
     }
+
     #[inline]
     pub fn get_type(&self) -> TypeId {
         self.col_type.clone()
     }
+
     #[inline]
     pub fn get_fixed_length(&self) -> usize {
         self.fixed_length
     }
+
     #[inline]
     pub fn get_variable_length(&self) -> usize {
         self.variable_length.clone()
     }
+
     #[inline]
     pub fn get_offset(&self) -> u32 {
         self.col_offset
     }
+
     #[inline]
     pub fn is_inlined(&self) -> bool {
         match self.col_type {
@@ -68,6 +73,7 @@ impl Column {
             }
         }
     }
+
     #[inline]
     pub fn get_length(&self) -> usize {
         if self.is_inlined() {

@@ -9,13 +9,49 @@ pub struct Schema {
     /// True if all the columns are inlined, false otherwise
     tuple_is_inlined: bool,
     /// Indices of all unlined columns.
-    unlined_columns_: Vec<u32>,
+    unlined_columns: Vec<u32>,
 }
 
 impl Schema {
+    pub fn new(columns: Vec<Column>) -> Self {
+        let mut cur_offset = 0;
+        let mut cols = Vec::new();
+        let mut length = 0;
+        let mut is_inlined = false;
+        let mut unlined_columns = Vec::new();
+        for (i, mut column) in columns.into_iter().enumerate() {
+            if !column.is_inlined() {
+                unlined_columns.push(i as u32);
+            }
+            column.set_col_offset(cur_offset);
+            cur_offset += column.get_fixed_length();
+            cols.push(column.clone());
+        }
+        length = cur_offset;
+        Self {
+            length,
+            columns: cols,
+            tuple_is_inlined: is_inlined,
+            unlined_columns
+        }
+    }
+
+    pub fn from_schema(from: &Schema, attrs: Vec<u32>) -> Self {
+        let mut cols = Vec::with_capacity(attrs.len());
+        for idx in attrs.iter() {
+            cols.push(from.get_column(*idx as usize));
+        }
+        Self::new(cols)
+    }
+
     #[inline]
     pub fn get_columns(&self) -> Vec<Column> {
         self.columns.clone()
+    }
+
+    #[inline]
+    pub fn get_length(&self) -> u32 {
+        self.length
     }
 
     #[inline]
@@ -32,12 +68,12 @@ impl Schema {
 
     #[inline]
     pub fn get_unlined_column(&self) -> Vec<u32> {
-        self.unlined_columns_.clone()
+        self.unlined_columns.clone()
     }
 
     #[inline]
     pub fn get_unlined_column_count(&self) -> usize {
-        self.unlined_columns_.len()
+        self.unlined_columns.len()
     }
 
     #[inline]

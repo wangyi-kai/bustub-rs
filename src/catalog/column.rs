@@ -48,8 +48,8 @@ impl Column {
     }
 
     #[inline]
-    pub fn get_fixed_length(&self) -> usize {
-        self.fixed_length
+    pub fn get_fixed_length(&self) -> u32 {
+        self.fixed_length as u32
     }
 
     #[inline]
@@ -80,5 +80,10 @@ impl Column {
             return self.fixed_length
         }
         self.variable_length
+    }
+
+    #[inline]
+    pub fn set_col_offset(&mut self, offset: u32) {
+        self.col_offset = offset
     }
 }

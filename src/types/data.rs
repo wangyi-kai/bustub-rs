@@ -26,6 +26,25 @@ pub enum TypeId {
     VARCHAR = 8,
 }
 
+impl Data {
+    #[inline]
+    pub fn get_size(&self) -> usize {
+        match self {
+            Data::None => 0,
+            Data::Boolean(_) => 1,
+            Data::SmallInt(_) => 2,
+            Data::TinyInt(_) => 1,
+            Data::Int(_) => 4,
+            Data::BigInt(_) => 8,
+            Data::Float(_) => 4,
+            Data::Double(_) => 8,
+            Data::Varchar(s) => s.len()
+        }
+    }
+
+    #[inline]
+
+}
 
 
 impl TypeId {

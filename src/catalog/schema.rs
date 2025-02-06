@@ -4,7 +4,7 @@ use crate::catalog::column::Column;
 pub struct Schema {
     /// Fixed-length column size
     length: u32,
-    /// All the columns in the schema, inlined and uninlined.
+    /// All the columns in the schema, inlined and unlined.
     columns: Vec<Column>,
     /// True if all the columns are inlined, false otherwise
     tuple_is_inlined: bool,
@@ -62,12 +62,12 @@ impl Schema {
     }
 
     #[inline]
-    pub fn get_column_size(&self) -> usize {
+    pub fn get_column_count(&self) -> usize {
         self.columns.len()
     }
 
     #[inline]
-    pub fn get_unlined_column(&self) -> Vec<u32> {
+    pub fn get_unlined_columns(&self) -> Vec<u32> {
         self.unlined_columns.clone()
     }
 

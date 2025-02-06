@@ -12,6 +12,19 @@ pub enum Data {
     Varchar(String),
 }
 
+#[derive(Clone, Debug)]
+pub enum DataType {
+    None,
+    Boolean,
+    TinyInt,
+    SmallInt,
+    Int,
+    BigInt,
+    Float,
+    Double,
+    Varchar,
+}
+
 #[derive(Debug, Clone)]
 #[repr(i32)]
 pub enum TypeId {
@@ -25,6 +38,23 @@ pub enum TypeId {
     DOUBLE = 7,
     VARCHAR = 8,
 }
+
+// impl DataType {
+//     #[inline]
+//     pub fn get_size(&self) -> usize {
+//         match self {
+//             DataType::None => 0,
+//             DataType::Boolean => 1,
+//             DataType::SmallInt => 2,
+//             DataType::TinyInt => 1,
+//             DataType::Int => 4,
+//             DataType::BigInt => 8,
+//             DataType::Float => 4,
+//             DataType::Double => 8,
+//             Data::Varchar(s) => s.len()
+//         }
+//     }
+// }
 
 impl Data {
     #[inline]
@@ -43,7 +73,30 @@ impl Data {
     }
 
     #[inline]
+    pub fn get_data_type(&self) -> DataType {
+        match self {
+            Data::None => DataType::None,
+            Data::Boolean(_) => DataType::Boolean,
+            Data::SmallInt(_) => DataType::SmallInt,
+            Data::TinyInt(_) => DataType::TinyInt,
+            Data::Int(_) => DataType::Int,
+            Data::BigInt(_) => DataType::BigInt,
+            Data::Float(_) => DataType::Float,
+            Data::Double(_) => DataType::Double,
+            Data::Varchar(_) => DataType::Varchar,
+        }
+    }
 
+    #[inline]
+    pub fn to_vec(self) -> Vec<u8> {
+        match self {
+            Data::Varchar(v) => v.into_bytes(),
+            Data::TinyInt(v) | Data::Int(v) | Data::BigInt(v) | Data::SmallInt(v) => v.to_be_bytes().to_vec(),
+            Data::Boolean(v) => if v { vec![1] } else { vec![0] },
+            Data::Float(v) | Data::Double(v) => v.to_be_bytes().to_vec(),
+            Data::None => { vec![] }
+        }
+    }
 }
 
 

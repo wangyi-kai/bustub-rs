@@ -1,22 +1,24 @@
 
-
+#[derive(Clone, Copy, Debug)]
 pub struct Slot {
     offset: u16,
     length: u16,
 }
 
 impl Slot {
+    #[inline]
     pub fn to_u8(&mut self) -> &[u8] {
         let bytes = unsafe {
             let ptr = self as *const Self as *const u8;
-            std::slice::from_raw_parts(ptr, std::mem::size_of(Self))
+            std::slice::from_raw_parts(ptr, std::mem::size_of::<Self>())
         };
         bytes
     }
 
+    #[inline]
     pub fn from_u8(&mut self, bytes: &[u8]) -> Self {
         let slot: Slot = unsafe {
-            std::ptr::read(bytes.as_ptr() as *const Self);
+            std::ptr::read(bytes.as_ptr() as *const Self)
         };
         slot
     }
@@ -32,13 +34,13 @@ pub struct PageHeader {
 }
 
 impl PageHeader {
-    const SIZE: usize = std::mem::size_of(Self);
+    const SIZE: usize = std::mem::size_of::<Self>();
 
     #[inline]
     pub fn to_u8(&mut self) -> &[u8] {
         let bytes = unsafe {
             let ptr = self as *const Self as *const u8;
-            std::slice::from_raw_parts(ptr, std::mem::size_of(self))
+            std::slice::from_raw_parts(ptr, std::mem::size_of::<Self>())
         };
         bytes
     }
@@ -65,7 +67,7 @@ pub struct Page {
 impl Page {
     #[inline(always)]
     pub fn get_data(&self) -> &[u8] {
-        self.data
+        &self.data
     }
 
     #[inline(always)]

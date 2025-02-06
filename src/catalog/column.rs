@@ -6,7 +6,7 @@ pub struct Column {
     /// field name
     col_name: String,
     /// field type
-    col_type: TypeId,
+    col_type: DataType,
     /// the size of the fixed length column
     fixed_length: usize,
     /// the length of the variable length column
@@ -16,18 +16,19 @@ pub struct Column {
 }
 
 impl Column {
-    pub fn new_with_fix(name: String, data_type: TypeId) -> Self {
-        let length = data_type.get_size();
+    pub fn new_with_fix(name: String, data: &Data) -> Self {
+        let length = data.get_size();
+        let col_type = data.get_data_type();
         Self {
             col_name: name,
-            col_type: data_type,
+            col_type,
             fixed_length: length,
             variable_length: 0,
             col_offset: 0,
         }
     }
 
-    pub fn new_with_unfix(name: String, data_type: TypeId, length: usize) -> Self {
+    pub fn new_with_unfix(name: String, data_type: DataType, length: usize) -> Self {
         Self {
             col_name: name,
             col_type: data_type,
@@ -43,7 +44,7 @@ impl Column {
     }
 
     #[inline]
-    pub fn get_type(&self) -> TypeId {
+    pub fn get_type(&self) -> DataType {
         self.col_type.clone()
     }
 
@@ -65,7 +66,7 @@ impl Column {
     #[inline]
     pub fn is_inlined(&self) -> bool {
         match self.col_type {
-            TypeId::VARCHAR => {
+            DataType::Varchar => {
                 true
             }
             _ => {
